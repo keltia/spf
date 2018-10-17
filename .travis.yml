@@ -1,0 +1,17 @@
+language: go
+go:
+- "1.11.x"
+- master
+matrix:
+  allow_failures:
+    - go: master
+  fast_finish: true
+branches:
+  only:
+  - develop
+  - master
+env:
+  - GO111MODULE=on
+script:
+  - make
+  - make test

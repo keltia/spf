@@ -6,14 +6,14 @@ import (
 
 // Resolver is the main interface we use
 type Resolver interface {
-	LookupAddr(addr string) ([]string, error)
+	LookupTXT(addr string) ([]string, error)
 }
 
 // NullResolver is empty
 type NullResolver struct{}
 
 // LookupAddr always return a good and fixed answer
-func (NullResolver) LookupAddr(addr string) ([]string, error) {
+func (NullResolver) LookupTXT(addr string) ([]string, error) {
 	return []string{addr}, nil
 }
 
@@ -21,6 +21,6 @@ func (NullResolver) LookupAddr(addr string) ([]string, error) {
 type RealResolver struct{}
 
 // LookupAddr use the real "net" function
-func (r RealResolver) LookupAddr(addr string) ([]string, error) {
-	return net.LookupAddr(addr)
+func (r RealResolver) LookupTXT(addr string) ([]string, error) {
+	return net.LookupTXT(addr)
 }

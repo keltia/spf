@@ -1,6 +1,7 @@
 package spf
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -12,7 +13,7 @@ type Resolver interface {
 // NullResolver is empty
 type NullResolver struct{}
 
-// LookupAddr always return a good and fixed answer
+// LookupTXT always return a good and fixed answer
 func (NullResolver) LookupTXT(addr string) ([]string, error) {
 	return []string{addr}, nil
 }
@@ -20,7 +21,15 @@ func (NullResolver) LookupTXT(addr string) ([]string, error) {
 // RealResolver will call the real one
 type RealResolver struct{}
 
-// LookupAddr use the real "net" function
+// LookupTXT use the real "net" function
 func (r RealResolver) LookupTXT(addr string) ([]string, error) {
 	return net.LookupTXT(addr)
+}
+
+// ErrorResolver always returns an error
+type ErrorResolver struct{}
+
+// LookupTXT is for testing errors
+func (ErrorResolver) LookupTXT(s string) ([]string, error) {
+	return []string{}, fmt.Errorf("error")
 }

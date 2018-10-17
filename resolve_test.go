@@ -21,3 +21,11 @@ func TestRealResolver_LookupTXT(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"v=spf1 -all"}, resp)
 }
+
+func TestErrorResolver_LookupTXT(t *testing.T) {
+	var r ErrorResolver
+
+	resp, err := r.LookupTXT("example.com")
+	assert.Error(t, err)
+	assert.Empty(t, resp)
+}

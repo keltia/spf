@@ -8,6 +8,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	myVersion = "0.0.1"
+)
+
 type Context struct {
 	r Resolver
 }
@@ -84,4 +88,8 @@ func (d *Domain) Unroll(limit int) (Blocks, error) {
 	}
 
 	return nil, nil
+}
+
+func Version() string {
+	return myVersion
 }

@@ -59,3 +59,7 @@ func TestDomain_Unroll(t *testing.T) {
 	assert.Nil(t, b)
 	assert.NoError(t, err)
 }
+
+func TestVersion(t *testing.T) {
+	require.Equal(t, myVersion, Version())
+}

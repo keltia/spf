@@ -63,6 +63,8 @@ ip4:
 ip6:
 mx
 ptr
+
+XXX macros are not supported
 */
 
 // Recursively fetch & unroll SPF (by default

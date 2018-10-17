@@ -90,6 +90,29 @@ func (d *Domain) Unroll(limit int) (Blocks, error) {
 	return nil, nil
 }
 
+var (
+	fVerbose = false
+	fDebug   = false
+)
+
+// SetVerbose sets the mode
+func SetVerbose() {
+	fVerbose = true
+}
+
+// SetDebug sets the mode too
+func SetDebug() {
+	fDebug = true
+	fVerbose = true
+}
+
+// Reset is for the two flags
+func Reset() {
+	fDebug = false
+	fVerbose = false
+}
+
+// Version returns our current version
 func Version() string {
 	return myVersion
 }

@@ -60,6 +60,28 @@ func TestDomain_Unroll(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestSetVerbose(t *testing.T) {
+	assert.False(t, fVerbose)
+	SetVerbose()
+	assert.True(t, fVerbose)
+	fVerbose = false
+}
+
+func TestSetDebug(t *testing.T) {
+	assert.False(t, fDebug)
+	SetDebug()
+	assert.True(t, fDebug)
+	assert.True(t, fVerbose)
+	fDebug = false
+	fVerbose = false
+}
+
+func TestReset(t *testing.T) {
+	fVerbose = true
+	Reset()
+	require.False(t, fVerbose)
+}
+
 func TestVersion(t *testing.T) {
 	require.Equal(t, myVersion, Version())
 }

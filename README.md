@@ -32,6 +32,12 @@ Only standard Go modules are used.  I use Semantic Versioning for all my modules
 SYNOPSIS
 ``` go
 
+    d, err := NewDomain("example.net")
+    err := d.Fetch()
+    
+    // Recursively unroll SPF records (0 = no limit)
+    blocks, err := d.Unroll(0)
+    
     You can have more verbose output and debug by using these functions:
     
     spf.SetVerbose()
@@ -44,7 +50,11 @@ SYNOPSIS
 
 I'm trying to get to 100% coverage but some error cases are more difficult to create.
 
-## License
+# NOTE
+
+There are several SPF-related modules in the Go community but what I want mostly (unraveling the chain) is not there (see https://godoc.org/blitiri.com.ar/go/spf).
+
+# License
 
 This is released under the BSD 2-Clause license.  See `LICENSE.md`.
 

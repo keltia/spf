@@ -32,3 +32,23 @@ func getSPF(rr []string) string {
 	}
 	return ""
 }
+
+const (
+	kwA = (1 << iota)
+	kwMX
+	kwPTR
+	kwEXISTS
+	kwINCLUDE
+	kwIP4
+	kwIP6
+)
+
+func parseTXT(txt string) ([]Entry, error) {
+	// Split
+	fields := strings.Fields(txt)
+	if len(fields) == 0 || fields[0] != "v=spf1" {
+		return nil, fmt.Errorf("wrong format %s", txt)
+	}
+
+	return nil, nil
+}

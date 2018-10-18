@@ -118,3 +118,14 @@ func (r *Result) parseTXT(dom string) error {
 
 	return nil
 }
+
+func (r *Result) String() string {
+	str := strings.Builder{}
+	str.WriteString(fmt.Sprintf("Max recursion level: %d\n", r.rec))
+	str.WriteString(fmt.Sprintf("Total DNS calls: %d\n", r.dns))
+	str.WriteString("IP Blocks:\n")
+	for _, b := range r.IPs {
+		str.WriteString(fmt.Sprintf("%s ", b.String()))
+	}
+	return str.String()
+}

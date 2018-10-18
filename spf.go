@@ -36,6 +36,7 @@ type Entry struct {
 
 // NewDomain creates a Domain object
 func NewDomain(dom string) (*Domain, error) {
+	debug("newdomain=%s", dom)
 	if dom == "" {
 		return &Domain{}, fmt.Errorf("empty domain")
 	}
@@ -50,6 +51,7 @@ func (d *Domain) Fetch() error {
 	if err != nil {
 		return errors.Wrap(err, "fetchtxt")
 	}
+	debug("all txt=%v", raw)
 	rawspf := getSPF(raw)
 	if rawspf == "" {
 		return fmt.Errorf("no spf")

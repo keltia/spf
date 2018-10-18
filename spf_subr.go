@@ -9,6 +9,7 @@ import (
 
 // fetchTXT fetch all TXT records for domain d
 func fetchTXT(ctx *Context, d string) ([]string, error) {
+	debug("fetchtxt")
 	if d == "" {
 		return nil, fmt.Errorf("nil domain")
 	}
@@ -24,6 +25,7 @@ func fetchTXT(ctx *Context, d string) ([]string, error) {
 
 // getSPF returns the first SPF record
 func getSPF(rr []string) string {
+	debug("getspf")
 	for _, r := range rr {
 		// We use only SPF (v=spf1), not SenderID (spf2.0/)
 		if strings.HasPrefix(r, "v=spf1") {

@@ -7,6 +7,8 @@ import (
 
 // Resolver is the main interface we use
 type Resolver interface {
+	LookupHost(host string) ([]string, error)
+	LookupMX(addr string) ([]*net.MX, error)
 	LookupTXT(addr string) ([]string, error)
 }
 
@@ -18,12 +20,30 @@ func (NullResolver) LookupTXT(addr string) ([]string, error) {
 	return []string{addr}, nil
 }
 
+func (NullResolver) LookupHost(host string) ([]string, error) {
+	return []string{}, nil
+}
+
+// LookupMX use the real "net" function
+func (NullResolver) LookupMX(addr string) ([]*net.MX, error) {
+	return []*net.MX{}, nil
+}
+
 // RealResolver will call the real one
 type RealResolver struct{}
 
 // LookupTXT use the real "net" function
-func (r RealResolver) LookupTXT(addr string) ([]string, error) {
+func (RealResolver) LookupTXT(addr string) ([]string, error) {
 	return net.LookupTXT(addr)
+}
+
+// LookupMX use the real "net" function
+func (RealResolver) LookupMX(addr string) ([]*net.MX, error) {
+	return net.LookupMX(addr)
+}
+
+func (RealResolver) LookupHost(host string) ([]string, error) {
+	return net.LookupHost(host)
 }
 
 // ErrorResolver always returns an error
@@ -32,4 +52,13 @@ type ErrorResolver struct{}
 // LookupTXT is for testing errors
 func (ErrorResolver) LookupTXT(s string) ([]string, error) {
 	return []string{}, fmt.Errorf("error")
+}
+
+func (ErrorResolver) LookupHost(host string) ([]string, error) {
+	return []string{}, fmt.Errorf("error")
+}
+
+// LookupMX use the real "net" function
+func (r ErrorResolver) LookupMX(addr string) ([]*net.MX, error) {
+	return net.LookupMX(addr)
 }

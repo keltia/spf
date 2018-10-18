@@ -2,7 +2,6 @@ package spf
 
 import (
 	"fmt"
-	"net"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -57,16 +56,3 @@ func getSPF(rr []string) string {
 	}
 	return ""
 }
-
-// Blocks is the final list of all IPs
-type Blocks []net.IPNet
-
-func (b Blocks) String() string {
-	var str strings.Builder
-
-	for _, e := range b {
-		str.WriteString((&e).String() + " ")
-	}
-	return str.String()
-}
-

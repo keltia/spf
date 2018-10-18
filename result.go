@@ -25,7 +25,7 @@ var (
 )
 
 type Result struct {
-	IPs Blocks
+	IPs []net.IPNet
 
 	rec int
 	dns int
@@ -58,9 +58,9 @@ func (r *Result) AppendMX(dom string) error {
 	return nil
 }
 
-func (r *Result) parseTXT(dom string) (Blocks, error) {
+func (r *Result) parseTXT(dom string) error {
 	if r.rec >= 10 {
-		return nil, fmt.Errorf("recursion limit")
+		return fmt.Errorf("recursion limit")
 	}
 
 	d, _ := NewDomain(dom)
@@ -70,7 +70,7 @@ func (r *Result) parseTXT(dom string) (Blocks, error) {
 
 	// First checks
 	if len(txt) == 0 || txt[0] != "v=spf1" {
-		return nil, fmt.Errorf("wrong format %s", txt)
+		return fmt.Errorf("wrong format %s", txt)
 	}
 
 	// We are not parsing completely, just what interest us
@@ -96,11 +96,8 @@ func (r *Result) parseTXT(dom string) (Blocks, error) {
 			r.rec++
 			r.dns++
 			// Recurse with include
-			b, err := r.parseTXT(m[2])
-			if err != nil {
-				continue
-			}
-			r.IPs = append(r.IPs, b...)
+			err := r.parseTXT(m[2])
+			debug("error was %v", err)
 		} else if reMXS.MatchString(f) {
 			//
 			debug("mx")
@@ -119,5 +116,5 @@ func (r *Result) parseTXT(dom string) (Blocks, error) {
 		}
 	}
 
-	return r.IPs, nil
+	return nil
 }

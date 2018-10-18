@@ -12,33 +12,31 @@ func TestResult_AppendMX(t *testing.T) {
 
 func TestResult_ParseTXT_Empty(t *testing.T) {
 	r := Result{}
-	f, err := r.parseTXT("")
+	err := r.parseTXT("")
 	assert.Error(t, err)
-	assert.Nil(t, f)
+	assert.Nil(t, r.IPs)
 }
 
 func TestResult_ParseTXT_Good(t *testing.T) {
 	SetDebug()
 	r := Result{}
-	f, err := r.parseTXT("salesforce.com")
+	err := r.parseTXT("salesforce.com")
 	assert.NoError(t, err)
-	assert.NotEmpty(t, f)
-	t.Logf("f=%s", f)
+	assert.NotEmpty(t, r.IPs)
+	t.Logf("f=%s", r.IPs)
 	t.Logf("rec=%d", r.rec)
 	t.Logf("dns=%d", r.dns)
-	assert.Equal(t, f, r.IPs)
 	Reset()
 }
 
 func TestResult_ParseTXT_Keltia(t *testing.T) {
 	SetDebug()
 	r := Result{}
-	f, err := r.parseTXT("keltia.net")
+	err := r.parseTXT("keltia.net")
 	assert.NoError(t, err)
-	assert.NotEmpty(t, f)
-	t.Logf("f=%s", f)
+	assert.NotEmpty(t, r.IPs)
+	t.Logf("f=%s", r.IPs)
 	t.Logf("rec=%d", r.rec)
 	t.Logf("dns=%d", r.dns)
-	assert.Equal(t, f, r.IPs)
 	Reset()
 }

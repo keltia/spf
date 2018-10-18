@@ -3,25 +3,25 @@ package spf
 import (
 	"fmt"
 	"net"
-    "regexp"
-    "strings"
+	"regexp"
+	"strings"
 )
 
 const (
-    matchQ   = `^([+\-\~\?])*`
-    matchIP  = `^ip(4|6)([:/])(.*)$`
-    matchINC = `^include([:/])(.*)$`
-    matchMX  = `^mx$`
-    matchRD  = `^redirect=(.*)$`
+	matchQ   = `^([+\-\~\?])*`
+	matchIP  = `^ip(4|6)([:/])(.*)$`
+	matchINC = `^include([:/])(.*)$`
+	matchMX  = `^mx$`
+	matchRD  = `^redirect=(.*)$`
 )
 
 var (
-    netm = map[string]string{"4": "/32", "6": "/128"}
+	netm = map[string]string{"4": "/32", "6": "/128"}
 
-    reIPS = regexp.MustCompile(matchIP)
-    reINC = regexp.MustCompile(matchINC)
-    reMXS = regexp.MustCompile(matchMX)
-    reRDR = regexp.MustCompile(matchRD)
+	reIPS = regexp.MustCompile(matchIP)
+	reINC = regexp.MustCompile(matchINC)
+	reMXS = regexp.MustCompile(matchMX)
+	reRDR = regexp.MustCompile(matchRD)
 )
 
 type Result struct {

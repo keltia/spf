@@ -55,8 +55,8 @@ func TestDomain_Unroll(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, d.Raw)
 
-	b, err := d.Unroll(0)
-	assert.Nil(t, b)
+	r, err := d.Unroll(0)
+	assert.Empty(t, r)
 	assert.NoError(t, err)
 }
 

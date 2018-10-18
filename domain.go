@@ -2,8 +2,6 @@ package spf
 
 import (
 	"fmt"
-	"net"
-	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -22,16 +20,6 @@ type Domain struct {
 	ctx  *Context
 	Name string
 	Raw  string
-	IPs  Blocks
-}
-
-// Blocks is the final list of all IPs
-type Blocks []net.IPNet
-
-// Entry is used when parsing SPF records
-type Entry struct {
-	t string
-	v string
 }
 
 // NewDomain creates a Domain object
@@ -61,6 +49,17 @@ func (d *Domain) Fetch() error {
 	return nil
 }
 
+// Fetch gets the SPF TXT RR
+func (d *Domain) FetchMX() ([]string, error) {
+	raw, err := fetchMX(d.ctx, d.Name)
+	if err != nil {
+		return []string{}, errors.Wrap(err, "fetchmx")
+	}
+	debug("all txt=%v", raw)
+
+	return raw, nil
+}
+
 /*
 SPF entries
 
@@ -75,6 +74,7 @@ ip4:
 ip6:
 mx
 ptr
+redirect:
 
 XXX macros are not supported
 */
@@ -89,13 +89,10 @@ func (d *Domain) Unroll(limit int) (Blocks, error) {
 		}
 	}
 
-	// Split
-	fields := strings.Fields(d.Raw)
-	if len(fields) == 0 || fields[0] != "v=spf1" {
-		return nil, fmt.Errorf("wrong format %s", d.Raw)
-	}
+	r := &Result{}
+	blks, _ := r.parseTXT(d.Name)
 
-	return nil, nil
+	return blks, nil
 }
 
 var (

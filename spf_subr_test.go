@@ -62,14 +62,3 @@ func TestGetSPF_NotFirst(t *testing.T) {
 	assert.Equal(t, r2, res)
 }
 
-func TestParseTXT_Empty(t *testing.T) {
-	f, err := parseTXT("")
-	assert.Error(t, err)
-	assert.Nil(t, f)
-}
-
-func TestParseTXT_Nil(t *testing.T) {
-	f, err := parseTXT("v=spf1")
-	assert.NoError(t, err)
-	assert.Nil(t, f)
-}

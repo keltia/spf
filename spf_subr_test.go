@@ -27,6 +27,9 @@ func TestFetchTXT_Error(t *testing.T) {
 	assert.Empty(t, txt)
 }
 
+func TestFetchMX_Null(t *testing.T) {
+}
+
 func TestGetSPF_Null(t *testing.T) {
 	require.Empty(t, getSPF(nil))
 }

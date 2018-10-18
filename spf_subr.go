@@ -58,22 +58,15 @@ func getSPF(rr []string) string {
 	return ""
 }
 
-const (
-	kwA = (1 << iota)
-	kwMX
-	kwPTR
-	kwEXISTS
-	kwINCLUDE
-	kwIP4
-	kwIP6
-)
+// Blocks is the final list of all IPs
+type Blocks []net.IPNet
 
-func parseTXT(txt string) ([]Entry, error) {
-	// Split
-	fields := strings.Fields(txt)
-	if len(fields) == 0 || fields[0] != "v=spf1" {
-		return nil, fmt.Errorf("wrong format %s", txt)
+func (b Blocks) String() string {
+	var str strings.Builder
+
+	for _, e := range b {
+		str.WriteString((&e).String() + " ")
 	}
-
-	return nil, nil
+	return str.String()
 }
+

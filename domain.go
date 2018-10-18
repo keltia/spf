@@ -80,7 +80,7 @@ XXX macros are not supported
 */
 
 // Recursively fetch & unroll SPF (by default
-func (d *Domain) Unroll(limit int) (Blocks, error) {
+func (d *Domain) Unroll(limit int) (*Result, error) {
 	// If not yet fetched
 	if d.Raw == "" {
 		err := d.Fetch()
@@ -90,9 +90,9 @@ func (d *Domain) Unroll(limit int) (Blocks, error) {
 	}
 
 	r := &Result{}
-	blks, _ := r.parseTXT(d.Name)
+	err := r.parseTXT(d.Name)
 
-	return blks, nil
+	return r, err
 }
 
 var (

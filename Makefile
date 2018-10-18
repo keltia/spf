@@ -6,7 +6,8 @@
 GO=		go
 GOBIN=  ${GOPATH}/bin
 
-SRCS= spf.go utils.go
+SRCS= domain.go resolve.go result.go utils.go
+SRCT= domain_test.go resolve_test.go result_test.go utils_test.go
 
 OPTS=	-ldflags="-s -w" -v
 
@@ -15,7 +16,7 @@ all: build
 build: ${SRCS}
 	${GO} build ${OPTS} ./cmd/...
 
-test:
+test: ${SRCS} ${SRCT}
 	${GO} test -v .
 
 install: ${BIN}

@@ -65,4 +65,7 @@ func main() {
 
 	err = d.Fetch()
 	fmt.Printf("SPF field:\n%s\n", d.Raw)
+
+	res, err := d.Unroll(0)
+	fmt.Printf("IP blocks:\n%s\n", res)
 }

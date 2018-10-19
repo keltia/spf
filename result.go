@@ -24,6 +24,7 @@ var (
 	reRDR = regexp.MustCompile(matchRD)
 )
 
+// Result is the main object used to recurse and store
 type Result struct {
 	IPs []net.IPNet
 
@@ -31,6 +32,7 @@ type Result struct {
 	dns int
 }
 
+// AppendMX gets all IP for the MXs
 func (r *Result) AppendMX(dom string) error {
 	d, _ := NewDomain(dom)
 	mx, _ := d.FetchMX()
@@ -58,6 +60,7 @@ func (r *Result) AppendMX(dom string) error {
 	return nil
 }
 
+// ParseTXT does the main SPF parsing
 func (r *Result) parseTXT(dom string) error {
 	if r.rec >= 10 {
 		return fmt.Errorf("recursion limit")
@@ -119,6 +122,7 @@ func (r *Result) parseTXT(dom string) error {
 	return nil
 }
 
+// String() is the basic Stringer
 func (r *Result) String() string {
 	str := strings.Builder{}
 	str.WriteString(fmt.Sprintf("Max recursion level: %d\n", r.rec))

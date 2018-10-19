@@ -20,6 +20,7 @@ func (NullResolver) LookupTXT(addr string) ([]string, error) {
 	return []string{addr}, nil
 }
 
+// LookupHost is for forward resolving
 func (NullResolver) LookupHost(host string) ([]string, error) {
 	return []string{}, nil
 }
@@ -42,6 +43,7 @@ func (RealResolver) LookupMX(addr string) ([]*net.MX, error) {
 	return net.LookupMX(addr)
 }
 
+// LookupHost is for forward resolving
 func (RealResolver) LookupHost(host string) ([]string, error) {
 	return net.LookupHost(host)
 }
@@ -54,6 +56,7 @@ func (ErrorResolver) LookupTXT(s string) ([]string, error) {
 	return []string{}, fmt.Errorf("error")
 }
 
+// LookupHost is for forward resolving
 func (ErrorResolver) LookupHost(host string) ([]string, error) {
 	return []string{}, fmt.Errorf("error")
 }

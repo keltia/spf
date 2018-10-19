@@ -49,7 +49,7 @@ func (d *Domain) Fetch() error {
 	return nil
 }
 
-// Fetch gets the SPF TXT RR
+// FetchMX gets the MX RR
 func (d *Domain) FetchMX() ([]string, error) {
 	raw, err := fetchMX(d.ctx, d.Name)
 	if err != nil {
@@ -79,7 +79,7 @@ redirect:
 XXX macros are not supported
 */
 
-// Recursively fetch & unroll SPF (by default
+// Unroll does recursively fetch & unroll SPF (by default
 func (d *Domain) Unroll(limit int) (*Result, error) {
 	// If not yet fetched
 	if d.Raw == "" {

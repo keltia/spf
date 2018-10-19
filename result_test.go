@@ -30,3 +30,10 @@ func TestResult_ParseTXT(t *testing.T) {
 	}
 	Reset()
 }
+
+func TestResult_ParseTXT_Recurs(t *testing.T) {
+	r := &Result{rec:100}
+	err := r.parseTXT("example.net")
+
+	assert.Error(t, err)
+}

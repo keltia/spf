@@ -60,6 +60,16 @@ func (r *Result) AppendMX(dom string) error {
 	return nil
 }
 
+func readIP(m []string) *net.IPNet {
+	net0 := m[3]
+	if !strings.Contains(net0, "/") {
+		net0 = net0 + netm[m[1]]
+	}
+	ip, ipb, _ := net.ParseCIDR(net0)
+	debug("ipnet: %s-%s", ip, ipb)
+	return ipb
+}
+
 // ParseTXT does the main SPF parsing
 func (r *Result) parseTXT(dom string) error {
 	if r.rec >= 10 {
@@ -82,15 +92,7 @@ func (r *Result) parseTXT(dom string) error {
 			//
 			debug("ip46: %s", m)
 
-			net0 := m[3]
-			if !strings.Contains(net0, "/") {
-				net0 = net0 + netm[m[1]]
-			}
-			ip, ipb, err := net.ParseCIDR(net0)
-			if err != nil {
-				continue
-			}
-			debug("ipnet: %s-%s", ip, ipb)
+			ipb := readIP(m)
 			r.IPs = append(r.IPs, *ipb)
 		} else if m := reINC.FindStringSubmatch(f); m != nil {
 			//

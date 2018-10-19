@@ -108,7 +108,7 @@ func (r *Result) parseTXT(dom string) error {
 			debug("mx")
 
 			r.AppendMX(d.Name)
-		} else if reRDR.MatchString(f) {
+		} else if reRDR.FindStringSubmatch(f); m != nil {
 			//
 			debug("redirect: %s", m)
 
@@ -116,6 +116,12 @@ func (r *Result) parseTXT(dom string) error {
 			if strings.HasSuffix(txt[len(txt)], "all") {
 				continue
 			}
+			r.rec++
+			r.dns++
+
+			// Recurse with redirect
+			err := r.parseTXT(m[1])
+			debug("error was %v", err)
 		} else {
 			debug("nothing")
 		}

@@ -46,6 +46,30 @@ func TestDomain_FetchError(t *testing.T) {
 	assert.Empty(t, d.Raw)
 }
 
+func TestDomain_FetchMX_Null(t *testing.T) {
+	d, err := NewDomain("example.net")
+	require.NoError(t, err)
+	require.NotNil(t, d)
+
+	d.ctx = &Context{&NullResolver{}}
+
+	mxs, err := d.FetchMX()
+	assert.NoError(t, err)
+	assert.Empty(t, mxs)
+}
+
+func TestDomain_FetchMX_Error(t *testing.T) {
+	d, err := NewDomain("example.net")
+	require.NoError(t, err)
+	require.NotNil(t, d)
+
+	d.ctx = &Context{&ErrorResolver{}}
+
+	mxs, err := d.FetchMX()
+	assert.Error(t, err)
+	assert.Empty(t, mxs)
+}
+
 func TestDomain_Unroll(t *testing.T) {
 	d, err := NewDomain("example.net")
 	require.NoError(t, err)
@@ -58,6 +82,15 @@ func TestDomain_Unroll(t *testing.T) {
 	r, err := d.Unroll(0)
 	assert.Empty(t, r)
 	assert.NoError(t, err)
+}
+
+func TestDomain_Unroll_Empty(t *testing.T) {
+	d := &Domain{Name:"example.net"}
+
+	d.ctx = &Context{NullResolver{}}
+	r, err := d.Unroll(0)
+	assert.Empty(t, r)
+	assert.Error(t, err)
 }
 
 func TestSetVerbose(t *testing.T) {

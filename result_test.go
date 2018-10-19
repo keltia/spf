@@ -17,26 +17,16 @@ func TestResult_ParseTXT_Empty(t *testing.T) {
 	assert.Nil(t, r.IPs)
 }
 
-func TestResult_ParseTXT_Good(t *testing.T) {
+func TestResult_ParseTXT(t *testing.T) {
 	SetDebug()
-	r := Result{}
-	err := r.parseTXT("salesforce.com")
-	assert.NoError(t, err)
-	assert.NotEmpty(t, r.IPs)
-	t.Logf("f=%s", r.IPs)
-	t.Logf("rec=%d", r.rec)
-	t.Logf("dns=%d", r.dns)
-	Reset()
-}
+	td := []string{"salesforce.com", "exacttarget.com", "keltia.net"}
 
-func TestResult_ParseTXT_Keltia(t *testing.T) {
-	SetDebug()
-	r := Result{}
-	err := r.parseTXT("keltia.net")
-	assert.NoError(t, err)
-	assert.NotEmpty(t, r.IPs)
-	t.Logf("f=%s", r.IPs)
-	t.Logf("rec=%d", r.rec)
-	t.Logf("dns=%d", r.dns)
+	for _, d := range td {
+		r := Result{}
+		err := r.parseTXT(d)
+		assert.NoError(t, err)
+		assert.NotEmpty(t, r.IPs)
+		t.Logf("r=%s", r.String())
+	}
 	Reset()
 }

@@ -62,3 +62,14 @@ func TestGetSPF_NotFirst(t *testing.T) {
 	assert.Equal(t, r2, res)
 }
 
+func TestFetchMX_Empty(t *testing.T) {
+	s, err := fetchMX(nil, "")
+	assert.Error(t, err)
+	assert.Empty(t, s)
+}
+
+func TestFetchMX_Nil(t *testing.T) {
+	s, err := fetchMX(nil, "example.net")
+	assert.Error(t, err)
+	assert.Empty(t, s)
+}

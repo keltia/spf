@@ -22,7 +22,7 @@ func TestResult_ParseTXT(t *testing.T) {
 	td := []string{"salesforce.com", "exacttarget.com", "keltia.net"}
 
 	for _, d := range td {
-		r := Result{}
+		r := NewResult()
 		err := r.parseTXT(d)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, r.IPs)
@@ -32,7 +32,7 @@ func TestResult_ParseTXT(t *testing.T) {
 }
 
 func TestResult_ParseTXT_Recurs(t *testing.T) {
-	r := &Result{rec:100}
+	r := &Result{rec: 100}
 	err := r.parseTXT("example.net")
 
 	assert.Error(t, err)

@@ -89,7 +89,7 @@ func (d *Domain) Unroll(limit int) (*Result, error) {
 		}
 	}
 
-	r := &Result{}
+	r := NewResult()
 	err := r.parseTXT(d.Name)
 
 	return r, err

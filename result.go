@@ -5,6 +5,8 @@ import (
 	"net"
 	"regexp"
 	"strings"
+
+	"github.com/yl2chen/cidranger"
 )
 
 const (
@@ -30,6 +32,11 @@ type Result struct {
 
 	rec int
 	dns int
+	rn  cidranger.Ranger
+}
+
+func NewResult() *Result {
+	return &Result{rn: cidranger.NewPCTrieRanger()}
 }
 
 // AppendMX gets all IP for the MXs
@@ -54,7 +61,13 @@ func (r *Result) AppendMX(dom string) error {
 			if err != nil {
 				debug("%v for %v", err, aip)
 			}
-			r.IPs = append(r.IPs, *ipb)
+
+			present, _ := r.rn.Contains(net.ParseIP(aip))
+			if !present {
+				r.IPs = append(r.IPs, *ipb)
+			} else {
+				debug("included")
+			}
 		}
 	}
 	return nil
@@ -79,6 +92,11 @@ func (r *Result) parseTXT(dom string) error {
 	d, _ := NewDomain(dom)
 	d.Fetch()
 
+	// Sanity control
+	if r.rn == nil {
+		r.rn = cidranger.NewPCTrieRanger()
+	}
+
 	txt := strings.Fields(d.Raw)
 
 	// First checks
@@ -90,10 +108,15 @@ func (r *Result) parseTXT(dom string) error {
 	for _, f := range txt[1:] {
 		if m := reIPS.FindStringSubmatch(f); m != nil {
 			//
-			debug("ip46: %s", m)
+			debug("ip46: %s", m[3])
 
-			ipb := readIP(m)
-			r.IPs = append(r.IPs, *ipb)
+			present, _ := r.rn.Contains(net.ParseIP(m[3]))
+			if !present {
+				ipb := readIP(m)
+				r.IPs = append(r.IPs, *ipb)
+			} else {
+				debug("included")
+			}
 		} else if m := reINC.FindStringSubmatch(f); m != nil {
 			//
 			debug("include: %s", m)
@@ -128,6 +151,16 @@ func (r *Result) parseTXT(dom string) error {
 	}
 
 	return nil
+}
+
+func (r *Result) Condense() []cidranger.RangerEntry {
+	rn := cidranger.NewPCTrieRanger()
+	for _, ipn := range r.IPs {
+		rn.Insert(cidranger.NewBasicRangerEntry(ipn))
+	}
+	res, _ := rn.ContainingNetworks(net.ParseIP("0.0.0.0/32"))
+	debug("res=%v", res)
+	return res
 }
 
 // String() is the basic Stringer

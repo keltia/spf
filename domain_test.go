@@ -85,7 +85,7 @@ func TestDomain_Unroll(t *testing.T) {
 }
 
 func TestDomain_Unroll_Empty(t *testing.T) {
-	d := &Domain{Name:"example.net"}
+	d := &Domain{Name: "example.net"}
 
 	d.ctx = &Context{NullResolver{}}
 	r, err := d.Unroll(0)

@@ -80,8 +80,8 @@ func TestDomain_Unroll(t *testing.T) {
 	assert.NotEmpty(t, d.Raw)
 
 	r, err := d.Unroll(0)
-	assert.Empty(t, r)
 	assert.NoError(t, err)
+	assert.Empty(t, r.IPs)
 }
 
 func TestDomain_Unroll_Empty(t *testing.T) {
